@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  email      String   @unique
+  password   String
+  quizes     Quiz[]
+}
+
+model Quiz {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  questions  Question[]
+  creator    User     @relation(fields: [creatorId], references: [id])
+  creatorId  String   @db.ObjectId
+}
+
+model Question {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  question   String
+  options    String[] 
+  correctAns Int
+  quiz       Quiz     @relation(fields: [quizId], references: [id])
+  quizId     String   @db.ObjectId
+}
