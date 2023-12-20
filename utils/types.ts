@@ -8,4 +8,11 @@ interface RequestWithUser extends Request {
   };
 }
 
-export { RequestWithUser };
+interface UserResult {
+  userId: string;
+  userName: string;
+  totalTimeTaken: number;
+  correctAnswersCount: number;
+}
+
+export { RequestWithUser, UserResult };

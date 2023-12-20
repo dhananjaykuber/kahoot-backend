@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,26 +9,41 @@ datasource db {
 
 
 model User {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  email      String   @unique
-  password   String
-  quizes     Quiz[]
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  email             String          @unique
+  password          String
+  quizzes           Quiz[]          
+  submittedAnswers  SubmittedAnswer[] 
 }
 
 model Quiz {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  title      String
-  questions  Question[]
-  creator    User     @relation(fields: [creatorId], references: [id])
-  creatorId  String   @db.ObjectId
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  title             String
+  questions         Question[]    
+  creator           User          @relation(fields: [creatorId], references: [id])
+  creatorId         String        @db.ObjectId
+  submittedAnswers  SubmittedAnswer[]
 }
 
 model Question {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  question   String
-  options    String[] 
-  correctAns Int
-  quiz       Quiz     @relation(fields: [quizId], references: [id])
-  quizId     String   @db.ObjectId
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  question          String
+  options           String[]      
+  correctAns        String        
+  quiz              Quiz          @relation(fields: [quizId], references: [id])
+  quizId            String        @db.ObjectId
+  submittedAnswers  SubmittedAnswer[]
+}
+
+model SubmittedAnswer {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  answer            String    
+  timeTaken         Int
+  user              User          @relation(fields: [userId], references: [id])
+  userId            String        @db.ObjectId
+  question          Question      @relation(fields: [questionId], references: [id])
+  questionId        String        @db.ObjectId
+  quiz          Quiz          @relation(fields: [quizId], references: [id])
+  quizId        String        @db.ObjectId
 }
